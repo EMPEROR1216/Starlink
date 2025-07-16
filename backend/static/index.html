@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starboard AI Agent</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⭐ Starboard AI Comparable Property Agent</h1>
+        <p>This agent finds the most relevant comparables based on a weighted similarity model.</p>
+        
+        <div id="loader" class="loader">Loading property data...</div>
+
+        <div id="controls" class="hidden">
+            <h2>Find Comparable Properties</h2>
+            <select id="pin-select">
+                <option>-- Select a Property PIN --</option>
+            </select>
+            <button id="find-button">Find Comparables</button>
+        </div>
+
+        <div id="results-container">
+            <!-- Results will be injected here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

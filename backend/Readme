@@ -1,0 +1,99 @@
+# Starboard AI/Agent Engineer Take-Home Challenge
+
+This repository contains the submission for the Starboard AI/Agent Engineer challenge. It features an intelligent agent system designed to integrate with county property APIs, extract industrial property data, and perform comparable analysis.
+
+**Candidate:** Laksh
+
+### Live Demo
+[Link to your 5-minute video walkthrough]
+
+---
+
+### Architecture Overview
+
+The system is built with a modular, agent-based architecture in Python, ensuring a clear separation of concerns:
+
+-   **`data_extractor.py`**: A specialized module responsible for all communication with a target API (Cook County). It handles fetching, pagination, cleaning, validation, and outlier detection.
+-   **`comparable_agent.py`**: The core "intelligent agent" that orchestrates the workflow. It uses the `data_extractor` to acquire data and then applies its own analytical models to perform comparable analysis.
+-   **`main.py`**: A command-line interface (CLI) that serves as the entry point for a user to interact with the agent system.
+
+---
+
+### Meeting the Challenge Requirements
+
+This submission successfully implements the core requirements for a single county (Cook County) and establishes a strong foundation for expansion.
+
+#### Phase 1: API Discovery Agent
+
+For this submission, I performed the initial discovery manually to build a robust and reliable data extraction pipeline for the primary target, Cook County. This involved:
+
+-   **Manual Ingestion & Cataloguing:** Identified the Socrata API endpoint and its query parameters (`$where`, `$limit`, `$offset`).
+-   **Field Mapping:** Manually created a `FIELD_MAPPING` dictionary to normalize field names (`building_sq_ft` -> `square_footage`).
+-   **Filter Identification:** Identified `property_class` as the key field for filtering industrial properties.
+
+**Next Step (Intelligent Discovery):** The architecture is designed to support a future "intelligent" discovery agent. This agent would use an LLM (leveraging the provided OpenAI key) to automatically generate the `FIELD_MAPPING` and filter parameters by analyzing a sample of the raw API JSON output, making integration with new counties (Dallas, LA) significantly faster.
+
+#### Phase 2: Data Extraction System
+
+The `data_extractor.py` module successfully implements all requirements for a robust extraction system:
+
+-   ✅ **Filters for industrial zoning codes:** The API query is built dynamically using a predefined list of industrial codes.
+-   ✅ **Handles JSON response format:** The system efficiently parses the JSON responses.
+-   ✅ **Validates required fields:** Records with missing critical data (square footage, location, etc.) are logged and dropped.
+-   ✅ **Flags outliers and suspicious records:** The system automatically flags properties in the top and bottom 1% of square footage as potential outliers, logging them for review without removing them from the dataset.
+-   ✅ **Logs errors with context:** Comprehensive logging is implemented throughout, capturing API errors, data validation issues, and processing status.
+-   ✅ **Respects API rate limits:** A `time.sleep(1)` delay is included in the pagination loop as a standard best practice.
+
+#### Phase 3: Comparable Discovery Agent
+
+The `ComparableAgent` contains the `find_comparables` method, which fulfills the core analysis requirement:
+
+-   ✅ **Finds similar properties:** The agent identifies comparables based on a multi-factor model.
+-   ✅ **Weights similarity factors:** A weighted Euclidean distance model is used to score similarity. The model considers:
+    -   `square_footage` (weight: 40%)
+    -   `year_built` (weight: 20%)
+    -   `latitude` (weight: 20%)
+    -   `longitude` (weight: 20%)
+    Location is considered a key factor, but property size is weighted most heavily as it is a primary driver of industrial property value.
+-   ✅ **Generates confidence scores:** The calculated distance is inverted to create an intuitive "confidence score," where a higher score indicates a better comparable.
+
+---
+
+### Setup and How to Run
+
+**1. Prerequisites:**
+- Python 3.8+
+- Git
+
+**2. Clone the Repository:**
+```bash
+git clone <your-github-repo-url>
+cd starboard_challenge
+```
+
+**3. Set up the Environment:**
+```bash
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**4. Configure API Key:**
+Create a file named `.env` in the project root and add the provided OpenAI API key:
+```
+OPENAI_API_KEY="sk-proj-XXXXXXXXXXXX"
+```
+
+**5. Run the Agent:**
+Launch the command-line interface:
+```bash
+python main.py
+```
+
+**Workflow:**
+1.  Select **Option 1** to fetch and process data from the Cook County API. This will create `cook_data.csv`.
+2.  Select **Option 2** to find comparables. You will be prompted to enter a Property Identification Number (PIN) from the dataset.
+3.  The agent will output the top 5 comparable properties with their confidence scores.

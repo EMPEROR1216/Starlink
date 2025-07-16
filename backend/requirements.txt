@@ -1,0 +1,7 @@
+pandas
+requests
+openai
+python-dotenv
+scikit-learn
+Flask
+Flask-Cors

@@ -1,0 +1,54 @@
+# ===================================================================
+# Python / Flask Backend
+# ===================================================================
+
+# Virtual Environment folder
+# This is the most important one for Python
+venv/
+
+# Compiled Python files
+*.pyc
+__pycache__/
+
+# Environment variables file
+# Should never be committed to Git
+.env
+
+# Log files
+*.log
+
+
+# ===================================================================
+# Node.js / Next.js Frontend
+# ===================================================================
+
+# Dependency directories
+# This is the most important one for Node.js
+node_modules/
+
+# Next.js build cache and output
+.next/
+
+# Debug log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# ===================================================================
+# General / OS / Editor specific
+# ===================================================================
+
+# Operating System generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and settings
+.vscode/
+.idea/
+
+# Data files
+data/
+
+# Output files
+output/

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Log files
+*.log
+
+# Data files
+*.csv
+
+# IDE / Editor specific
+.idea/
+.cursor/
